@@ -1,0 +1,24 @@
+name: Build Cloud DLL
+on: [push, workflow_dispatch]
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup MSVC Compiler
+        uses: ilammy/msvc-dev-cmd@v1
+        with:
+          arch: x86
+
+      - name: Compile 32-bit DLL
+        run: |
+          cl.exe /LD /EHsc /O2 ApexModV4.cpp /link /OUT:ApexModV4.dll
+
+      - name: Upload Finished DLL
+        uses: actions/upload-artifact@v4
+        with:
+          name: Compiled-ApexModV4-DLL
+          path: ApexModV4.dll
